@@ -4,7 +4,6 @@ module "codebuild" {
   region                     = var.region
   codebuild_service_role_arn = module.iam.codebuild_service_role_arn
   shared_artifacts_bucket    = module.s3.shared_artifacts_bucket
-  lambda_bucket              = module.s3.lambda_bucket
 }
 
 module "iam" {

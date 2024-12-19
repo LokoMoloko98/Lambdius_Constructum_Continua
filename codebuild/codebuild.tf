@@ -26,7 +26,7 @@ resource "aws_codebuild_project" "lambda_codebuild" {
                   pip install -r requirements.txt -t .;  # Install requirements into the directory
                   zip -r function.zip .;  # Zip the entire directory
                   version=$(date +%Y%m%d%H%M%S)
-                  aws s3 cp function.zip s3://${shared_artifacts_bucket}/lambda/$DIR/function-${version}.zip;  # Upload zip to S3
+                  aws s3 cp function.zip s3://${var.shared_artifacts_bucket}/lambda/$DIR/function-${version}.zip;  # Upload zip to S3
                   cd ..;
                 done
           post_build:
