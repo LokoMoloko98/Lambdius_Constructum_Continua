@@ -7,32 +7,7 @@ resource "aws_codebuild_project" "lambdius-constructum-continua-artifacts_codebu
     type            = "GITHUB"
     location        = "https://github.com/LokoMoloko98/mea-munera-lambda.git"
     git_clone_depth = 1
-    buildspec       = <<-EOF
-        version: 0.2
-
-        phases:
-          install:
-            commands:
-          pre_build:
-            commands:
-              - echo "Detecting changes in the repository..."
-              - export CHANGED_DIRS=$(git diff --name-only HEAD~1 HEAD | awk -F'/' '{print $1}' | sort -u | uniq)
-              - echo "Changed directories: $CHANGED_DIRS
-          build:
-            commands:
-              - for DIR in $CHANGED_DIRS; do
-                  echo "Processing $DIR...";
-                  cd $DIR;
-                  pip install -r requirements.txt -t .;  # Install requirements into the directory
-                  zip -r function.zip .;  # Zip the entire directory
-                  version=$(date +%Y%m%d%H%M%S)
-                  aws s3 cp function.zip s3://${var.shared_artifacts_bucket}/lambda/$DIR/function-$version.zip;  # Upload zip to S3
-                  cd ..;
-                done
-          post_build:
-              commands:
-              
-        EOF
+    buildspec       = "buildspec.yaml"
   }
 
   artifacts {
@@ -45,6 +20,10 @@ resource "aws_codebuild_project" "lambdius-constructum-continua-artifacts_codebu
     compute_type = "BUILD_GENERAL1_SMALL"
     image        = "aws/codebuild/standard:6.0"
     type         = "LINUX_CONTAINER"
+    environment_variable {
+      name  = "SHARED_ARTIFACTS_BUCKET"
+      value = var.shared_artifacts_bucket
+    }
   }
 
   tags = {
