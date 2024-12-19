@@ -10,7 +10,7 @@ module "iam" {
   source                       = "./iam"
   project_name                 = var.project_name
   region                       = var.region
-  shared_artifacts_bucket_name = module.s3.shared_artifacts_bucket_name
+  shared_artifacts_bucket_name = module.s3.shared_artifacts_bucket
 }
 
 # module "codepipeline" {
