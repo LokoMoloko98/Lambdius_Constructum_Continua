@@ -2,7 +2,7 @@ data "aws_region" "current" {}
 data "aws_caller_identity" "current" {}
 
 resource "aws_iam_role" "codepipeline_role" {
-  name = "CodePipelineRole"
+  name = "${var.project_name}-CodePipelineRole"
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
@@ -16,10 +16,15 @@ resource "aws_iam_role" "codepipeline_role" {
       }
     ]
   })
+
+  tags = {
+    Name    = "${var.project_name}-CodePipelineRole"
+    Project = var.project_name
+  }
 }
 
 resource "aws_iam_role_policy" "codepipeline_policy" {
-  name = "CodePipelinePolicy"
+  name = "${var.project_name}-CodePipelinePolicy"
   role = aws_iam_role.codepipeline_role.id
 
   policy = jsonencode({
@@ -65,8 +70,7 @@ resource "aws_iam_role_policy" "codepipeline_policy" {
 
 
 resource "aws_iam_role" "codebuild_role" {
-  name = "CodeBuildRole"
-
+  name = "${var.project_name}-CodeBuildRole"
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
     Statement = [
@@ -79,10 +83,14 @@ resource "aws_iam_role" "codebuild_role" {
       }
     ]
   })
+  tags = {
+    Name    = "${var.project_name}-CodeBuildRole"
+    Project = var.project_name
+  }
 }
 
 resource "aws_iam_role_policy" "codebuild_policy" {
-  name = "CodeBuildPolicy"
+  name = "${var.project_name}-CodeBuildPolicy"
   role = aws_iam_role.codebuild_role.id
 
   policy = jsonencode({
