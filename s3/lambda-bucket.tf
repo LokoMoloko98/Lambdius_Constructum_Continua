@@ -8,7 +8,6 @@ resource "aws_s3_bucket" "lambda_bucket" {
 
   tags = {
     Name        = "${var.project_name}-lambda-deployment"
-    Environment = var.environment
   }
 }
 

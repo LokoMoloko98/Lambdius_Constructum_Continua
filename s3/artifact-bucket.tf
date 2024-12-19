@@ -1,14 +1,8 @@
 resource "aws_s3_bucket" "shared_artifacts_bucket" {
   bucket = "${var.project_name}-ci-artifacts"
-  acl    = "private"
-
-  versioning {
-    enabled = true
-  }
 
   tags = {
     Name        = "${var.project_name}-ci-artifacts"
-    Environment = var.environment
   }
 }
 

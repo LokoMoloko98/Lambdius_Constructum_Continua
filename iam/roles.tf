@@ -30,8 +30,8 @@ resource "aws_iam_role_policy" "codepipeline_policy" {
           "s3:ListBucket"
         ]
         Resource = [
-          "arn:aws:s3:::${var.codepipeline_bucket_name}",
-          "arn:aws:s3:::${var.codepipeline_bucket_name}/*"
+          "arn:aws:s3:::${var.shared_artifacts_bucket_name}",
+          "arn:aws:s3:::${var.shared_artifacts_bucket_name}/*"
         ]
       },
       {
@@ -47,6 +47,14 @@ resource "aws_iam_role_policy" "codepipeline_policy" {
         Effect = "Allow"
         Action = "iam:PassRole"
         Resource = aws_iam_role.codebuild_role.arn
+      },
+      {
+        Effect = "Allow"
+        Action = [
+          "lambda:UpdateFunctionCode",
+          "lambda:GetFunction"
+        ]
+        Resource = "arn:aws:lambda:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:function:*"
       }
     ]
   })
@@ -85,8 +93,8 @@ resource "aws_iam_role_policy" "codebuild_policy" {
           "s3:ListBucket"
         ]
         Resource = [
-          "arn:aws:s3:::${var.build_artifacts_bucket_name}",
-          "arn:aws:s3:::${var.build_artifacts_bucket_name}/*"
+          "arn:aws:s3:::${var.shared_artifacts_bucket_name}",
+          "arn:aws:s3:::${var.shared_artifacts_bucket_name}/*"
         ]
       },
       {

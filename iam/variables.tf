@@ -9,13 +9,7 @@ variable "project_name" {
   type        = string
 }
 
-variable "codepipeline_bucket_name" {
+variable "shared_artifacts_bucket_name" {
   description = "CodePipeline bucket name"
-  type        = string
-  
-}
-
-variable "build_artifacts_bucket_name" {
-  description = "Build artifacts bucket name"
   type        = string
 }
