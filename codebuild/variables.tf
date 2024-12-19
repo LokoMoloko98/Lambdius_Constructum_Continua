@@ -14,12 +14,6 @@ variable "codebuild_service_role_arn" {
   type        = string
 }
 
-variable "lambda_bucket" {
-  description = "Lambda bucket name"
-  type        = string
-  
-}
-
 variable "shared_artifacts_bucket" {
   description = "Shared artifacts bucket"
   type        = string

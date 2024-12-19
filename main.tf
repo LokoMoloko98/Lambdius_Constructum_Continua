@@ -4,14 +4,13 @@ module "codebuild" {
   region                     = var.region
   codebuild_service_role_arn = module.iam.codebuild_service_role_arn
   shared_artifacts_bucket    = module.s3.shared_artifacts_bucket
-  lambda_bucket              = module.s3.lambda_bucket
 }
 
 module "iam" {
   source                       = "./iam"
   project_name                 = var.project_name
   region                       = var.region
-  shared_artifacts_bucket_name = module.s3.shared_artifacts_bucket_name
+  shared_artifacts_bucket_name = module.s3.shared_artifacts_bucket
 }
 
 # module "codepipeline" {
