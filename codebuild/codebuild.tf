@@ -1,5 +1,5 @@
-resource "aws_codebuild_project" "lambda_codebuild" {
-  name          = "lambda-functions-build"
+resource "aws_codebuild_project" "lambdius-constructum-continua-artifacts_codebuild" {
+  name          = "${var.project_name}-lambda-functions-build"
   service_role  = var.codebuild_service_role_arn
   build_timeout = 30
 
@@ -42,9 +42,14 @@ resource "aws_codebuild_project" "lambda_codebuild" {
   }
 
   environment {
-    compute_type = "BUILD_GENERAL1_SMALL"
+    compute_type = "BUILD_LAMBDA_2GB"
     image        = "aws/codebuild/standard:6.0"
-    type         = "LINUX_CONTAINER"
+    type         = "LINUX_LAMBDA_CONTAINER"
+  }
+  
+  tags = {
+    Name = "${var.project_name}-lambda-functions-build"
+    Project = var.project_name
   }
 }
 
