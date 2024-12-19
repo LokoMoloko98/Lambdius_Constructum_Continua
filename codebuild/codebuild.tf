@@ -43,8 +43,8 @@ resource "aws_codebuild_project" "lambdius-constructum-continua-artifacts_codebu
 
   environment {
     compute_type = "BUILD_LAMBDA_2GB"
-    image        = "aws/codebuild/standard:6.0"
-    type         = "LINUX_LAMBDA_CONTAINER"
+    image        = "aws/codebuild/amazonlinux2-x86_64-standard:3.0"
+    type         = "LINUX_CONTAINER"
   }
   
   tags = {
