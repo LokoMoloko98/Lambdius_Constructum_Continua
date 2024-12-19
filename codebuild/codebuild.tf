@@ -34,21 +34,21 @@ resource "aws_codebuild_project" "lambdius-constructum-continua-artifacts_codebu
               
         EOF
   }
-  
-   artifacts {
-    type = "S3"
-    location = var.shared_artifacts_bucket
+
+  artifacts {
+    type      = "S3"
+    location  = var.shared_artifacts_bucket
     packaging = "ZIP"
   }
 
   environment {
-    compute_type = "BUILD_LAMBDA_2GB"
-    image        = "aws/codebuild/amazonlinux2-x86_64-standard:3.0"
+    compute_type = "BUILD_GENERAL1_SMALL"
+    image        = "aws/codebuild/standard:6.0"
     type         = "LINUX_CONTAINER"
   }
-  
+
   tags = {
-    Name = "${var.project_name}-lambda-functions-build"
+    Name    = "${var.project_name}-lambda-functions-build"
     Project = var.project_name
   }
 }
