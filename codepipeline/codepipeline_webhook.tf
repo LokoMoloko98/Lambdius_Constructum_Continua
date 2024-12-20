@@ -28,5 +28,7 @@ resource "github_repository_webhook" "codepipeline_webhook" {
     secret       = data.aws_ssm_parameter.Github_Webhook_token.value
   }
 
+   depends_on = [aws_codepipeline_webhook.github_webhook]
+
   events = ["push"]
 }
