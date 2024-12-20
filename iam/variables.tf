@@ -13,3 +13,8 @@ variable "shared_artifacts_bucket_name" {
   description = "CodePipeline bucket name"
   type        = string
 }
+
+variable "codestarconnections_connection_arn" {
+  description = "CodeStar connection"
+  type        = string
+}

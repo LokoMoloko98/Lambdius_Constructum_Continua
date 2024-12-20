@@ -1,11 +1,11 @@
-resource "aws_codebuild_project" "lambdius-constructum-continua-artifacts_codebuild" {
+resource "aws_codebuild_project" "lambdius-constructum-continua-codebuild" {
   name          = "${var.project_name}-lambda-functions-build"
   service_role  = var.codebuild_service_role_arn
   build_timeout = 30
 
   source {
     type            = "GITHUB"
-    location        = "https://github.com/LokoMoloko98/mea-munera-lambda.git"
+    location        = var.lambda_functions_repo
     git_clone_depth = 1
     buildspec       = "buildspec.yaml"
   }

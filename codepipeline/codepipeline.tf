@@ -1,62 +1,86 @@
-# resource "aws_codepipeline" "lambda_pipeline" {
-#   name     = "lambda-deployment-pipeline"
-#   role_arn = aws_iam_role.codepipeline_role.arn
+data "aws_ssm_parameter" "github_pat" {
+  name = "Github_PAT"
+}
 
-#   artifact_store {
-#     location = aws_s3_bucket.codepipeline_bucket.bucket
-#     type     = "S3"
-#   }
+resource "aws_codepipeline" "lambdius-constructum-continua-lambda-codepipeline" {
+  name     = "${var.project_name}-lambda-deployment-pipeline"
+  role_arn = var.codepipeline_service_role_arn
 
-#   stage {
-#     name = "Source"
+  artifact_store {
+    location = var.shared_artifacts_bucket
+    type     = "S3"
+  }
 
-#     action {
-#       name             = "Source"
-#       category         = "Source"
-#       owner            = "AWS"
-#       provider         = "CodeCommit"
-#       version          = "1"
-#       output_artifacts = ["source_output"]
+  stage {
+    name = "Source"
 
-#       configuration = {
-#         RepositoryName = "Lambdius_Constructum_Continua"
-#         BranchName     = "main"
-#       }
-#     }
-#   }
+    action {
+      name             = "Source"
+      category         = "Source"
+      owner            = "AWS"
+      provider         = "CodeStarSourceConnection"
+      version          = "1"
+      output_artifacts = ["source_output", "webhook_payload"]
 
-#   stage {
-#     name = "Build"
+      configuration = {
+        ConnectionArn = aws_codestarconnections_connection.github_connection.arn
+        FullRepositoryId = var.lambda_functions_repo
+        BranchName               = "main"
+        OAuthToken    = data.aws_ssm_parameter.github_pat.value
+      }
+    }
+  }
 
-#     action {
-#       name             = "Build"
-#       category         = "Build"
-#       owner            = "AWS"
-#       provider         = "CodeBuild"
-#       version          = "1"
-#       input_artifacts  = ["source_output"]
-#       output_artifacts = ["build_output"]
+  stage {
+    name = "Build"
 
-#       configuration = {
-#         ProjectName = aws_codebuild_project.lambda_build.name
-#       }
-#     }
-#   }
+    action {
+      name             = "Build"
+      category         = "Build"
+      owner            = "AWS"
+      provider         = "CodeBuild"
+      version          = "1"
+      input_artifacts  = ["source_output", "webhook_payload"]
+      output_artifacts = ["build_output", "processed_functions"]
+
+      configuration = {
+        ProjectName = var.aws_codebuild_project_name
+        EnvironmentVariables = jsonencode([
+          {
+            name  = "SHARED_ARTIFACTS_BUCKET"
+            value = var.shared_artifacts_bucket
+            type  = "PLAINTEXT"
+          },
+        ])
+      }
+    }
+  }
 
 #   stage {
 #     name = "Deploy"
 
-#     action {
-#       name             = "Deploy"
-#       category         = "Deploy"
-#       owner            = "AWS"
-#       provider         = "Lambda"
-#       version          = "1"
-#       input_artifacts  = ["build_output"]
+#         action {
+#             name            = "Deploy"
+#             category        = "Invoke"
+#             owner           = "AWS"
+#             provider        = "Lambda"
+#             version         = "1"
+#             input_artifacts = ["build_output"]
 
-#       configuration = {
-#         FunctionName = "YOUR_LAMBDA_FUNCTION_NAME"
-#       }
+#             configuration = {
+#             FunctionName = "your-deployment-helper-function"
+#             UserParameters = <<JSON
+#                 {
+#                 "bucket": "${var.shared_artifacts_bucket}",
+#                 "key": "lambda/changed_dirs.json"
+#                 }
+#             JSON
+#             }
+#         }
 #     }
-#   }
-# }
+
+  tags = {
+    Name    = "${var.project_name}-pipeline"
+    Project = var.project_name
+  }
+}
