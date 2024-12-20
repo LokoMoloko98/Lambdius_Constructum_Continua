@@ -23,10 +23,10 @@ resource "aws_codepipeline" "lambdius-constructum-continua-lambda-codepipeline" 
       output_artifacts = ["source_output", "webhook_payload"]
 
       configuration = {
-        ConnectionArn = aws_codestarconnections_connection.github_connection.arn
+        ConnectionArn    = aws_codestarconnections_connection.github_connection.arn
         FullRepositoryId = var.lambda_functions_repo
-        BranchName               = "main"
-        OAuthToken    = data.aws_ssm_parameter.github_pat.value
+        BranchName       = "main"
+        #OAuthToken       = data.aws_ssm_parameter.github_pat.value
       }
     }
   }
@@ -56,28 +56,28 @@ resource "aws_codepipeline" "lambdius-constructum-continua-lambda-codepipeline" 
     }
   }
 
-#   stage {
-#     name = "Deploy"
+  #   stage {
+  #     name = "Deploy"
 
-#         action {
-#             name            = "Deploy"
-#             category        = "Invoke"
-#             owner           = "AWS"
-#             provider        = "Lambda"
-#             version         = "1"
-#             input_artifacts = ["build_output"]
+  #         action {
+  #             name            = "Deploy"
+  #             category        = "Invoke"
+  #             owner           = "AWS"
+  #             provider        = "Lambda"
+  #             version         = "1"
+  #             input_artifacts = ["build_output"]
 
-#             configuration = {
-#             FunctionName = "your-deployment-helper-function"
-#             UserParameters = <<JSON
-#                 {
-#                 "bucket": "${var.shared_artifacts_bucket}",
-#                 "key": "lambda/changed_dirs.json"
-#                 }
-#             JSON
-#             }
-#         }
-#     }
+  #             configuration = {
+  #             FunctionName = "your-deployment-helper-function"
+  #             UserParameters = <<JSON
+  #                 {
+  #                 "bucket": "${var.shared_artifacts_bucket}",
+  #                 "key": "lambda/changed_dirs.json"
+  #                 }
+  #             JSON
+  #             }
+  #         }
+  #     }
 
   tags = {
     Name    = "${var.project_name}-pipeline"

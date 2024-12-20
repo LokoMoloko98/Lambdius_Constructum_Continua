@@ -30,7 +30,7 @@ resource "aws_iam_role_policy" "codepipeline_policy" {
   policy = jsonencode({
     Version = "2012-10-17"
     Statement = [
-       {
+      {
         Effect = "Allow"
         Action = [
           "codestar-connections:UseConnection"
@@ -59,8 +59,8 @@ resource "aws_iam_role_policy" "codepipeline_policy" {
         Resource = "arn:aws:codebuild:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:project/*"
       },
       {
-        Effect = "Allow"
-        Action = "iam:PassRole"
+        Effect   = "Allow"
+        Action   = "iam:PassRole"
         Resource = aws_iam_role.codebuild_role.arn
       },
       {

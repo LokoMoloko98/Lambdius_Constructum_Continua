@@ -8,10 +8,10 @@ module "codebuild" {
 }
 
 module "iam" {
-  source                       = "./iam"
-  project_name                 = var.project_name
-  region                       = var.region
-  shared_artifacts_bucket_name = module.s3.shared_artifacts_bucket
+  source                             = "./iam"
+  project_name                       = var.project_name
+  region                             = var.region
+  shared_artifacts_bucket_name       = module.s3.shared_artifacts_bucket
   codestarconnections_connection_arn = module.codepipeline.codestarconnections_connection_arn
 }
 

@@ -16,13 +16,13 @@ variable "codepipeline_service_role_arn" {
 
 variable "shared_artifacts_bucket" {
   description = "shared artifacts bucket"
-  type        = string  
+  type        = string
 }
 
 variable "aws_codebuild_project_name" {
   description = "codebuild service role name"
   type        = string
-  
+
 }
 
 variable "lambda_functions_repo" {
@@ -32,5 +32,5 @@ variable "lambda_functions_repo" {
 
 variable "lambda_functions_repo_name" {
   description = "Lambda functions repository name"
-  type        = string  
+  type        = string
 }
