@@ -20,7 +20,7 @@ resource "aws_codepipeline" "lambdius-constructum-continua-lambda-codepipeline" 
       owner            = "AWS"
       provider         = "CodeStarSourceConnection"
       version          = "1"
-      output_artifacts = ["source_output", "webhook_payload"]
+      output_artifacts = ["webhook_payload"]
 
       configuration = {
         ConnectionArn    = aws_codestarconnections_connection.github_connection.arn
@@ -40,8 +40,8 @@ resource "aws_codepipeline" "lambdius-constructum-continua-lambda-codepipeline" 
       owner            = "AWS"
       provider         = "CodeBuild"
       version          = "1"
-      input_artifacts  = ["source_output", "webhook_payload"]
-      output_artifacts = ["build_output", "processed_functions"]
+      input_artifacts  = ["webhook_payload"]
+      output_artifacts = ["build_output"]
 
       configuration = {
         ProjectName = var.aws_codebuild_project_name
