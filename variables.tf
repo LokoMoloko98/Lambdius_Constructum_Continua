@@ -11,10 +11,10 @@ variable "project_name" {
 
 variable "lambda_functions_repo" {
   description = "Lambda functions repository"
-  type        = string  
+  type        = string
 }
 
 variable "lambda_functions_repo_name" {
   description = "Lambda functions repository name"
-  type        = string  
+  type        = string
 }

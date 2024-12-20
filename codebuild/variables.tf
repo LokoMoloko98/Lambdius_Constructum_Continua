@@ -17,11 +17,11 @@ variable "codebuild_service_role_arn" {
 variable "shared_artifacts_bucket" {
   description = "Shared artifacts bucket"
   type        = string
-  
+
 }
 
 variable "lambda_functions_repo" {
   description = "Lambda functions repository"
   type        = string
-  
+
 }
