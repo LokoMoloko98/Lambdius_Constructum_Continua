@@ -19,3 +19,9 @@ variable "shared_artifacts_bucket" {
   type        = string
   
 }
+
+variable "lambda_functions_repo" {
+  description = "Lambda functions repository"
+  type        = string
+  
+}
