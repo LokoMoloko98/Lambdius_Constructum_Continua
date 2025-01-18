@@ -1,7 +1,4 @@
-output "codepipeline_role_arn" {
-  value = aws_iam_role.codepipeline_role.arn
-}
+output "codestarconnections_connection_arn" {
+  value = aws_codestarconnections_connection.github_connection.arn
 
-output "codebuild_role_arn" {
-  value = aws_iam_role.codebuild_role.arn
 }

@@ -33,6 +33,13 @@ resource "aws_iam_role_policy" "codepipeline_policy" {
       {
         Effect = "Allow"
         Action = [
+          "codestar-connections:UseConnection"
+        ]
+        Resource = var.codestarconnections_connection_arn
+      },
+      {
+        Effect = "Allow"
+        Action = [
           "s3:GetObject",
           "s3:PutObject",
           "s3:ListBucket"
@@ -52,8 +59,8 @@ resource "aws_iam_role_policy" "codepipeline_policy" {
         Resource = "arn:aws:codebuild:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:project/*"
       },
       {
-        Effect = "Allow"
-        Action = "iam:PassRole"
+        Effect   = "Allow"
+        Action   = "iam:PassRole"
         Resource = aws_iam_role.codebuild_role.arn
       },
       {
