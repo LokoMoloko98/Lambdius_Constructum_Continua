@@ -26,7 +26,6 @@ resource "aws_codepipeline" "lambdius-constructum-continua-lambda-codepipeline" 
         ConnectionArn        = aws_codestarconnections_connection.github_connection.arn
         FullRepositoryId     = var.lambda_functions_repo
         BranchName           = "Buildspec-Edits"
-        OutputArtifactFormat = "CODEPIPELINE"
       }
     }
   }
@@ -49,16 +48,6 @@ resource "aws_codepipeline" "lambdius-constructum-continua-lambda-codepipeline" 
           {
             name  = "SHARED_ARTIFACTS_BUCKET"
             value = var.shared_artifacts_bucket
-            type  = "PLAINTEXT"
-          },
-          {
-            name  = "COMMIT_ID"
-            value = "#{Source.SourceIdentifier.CommitId}"
-            type  = "PLAINTEXT"
-          },
-          {
-            name  = "PREVIOUS_COMMIT_ID"
-            value = "#{Source.SourceIdentifier.PreviousCommitId}"
             type  = "PLAINTEXT"
           }
         ])
