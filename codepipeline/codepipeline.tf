@@ -20,13 +20,13 @@ resource "aws_codepipeline" "lambdius-constructum-continua-lambda-codepipeline" 
       owner            = "AWS"
       provider         = "CodeStarSourceConnection"
       version          = "1"
-      output_artifacts = ["webhook_payload"]
+      output_artifacts = ["source_output"]
 
       configuration = {
-        ConnectionArn    = aws_codestarconnections_connection.github_connection.arn
-        FullRepositoryId = var.lambda_functions_repo
-        BranchName       = "main"
-        #OAuthToken       = data.aws_ssm_parameter.github_pat.value
+        ConnectionArn        = aws_codestarconnections_connection.github_connection.arn
+        FullRepositoryId     = var.lambda_functions_repo
+        BranchName           = "Buildspec-Edits"
+        OutputArtifactFormat = "CODEPIPELINE"
       }
     }
   }
@@ -40,7 +40,7 @@ resource "aws_codepipeline" "lambdius-constructum-continua-lambda-codepipeline" 
       owner            = "AWS"
       provider         = "CodeBuild"
       version          = "1"
-      input_artifacts  = ["webhook_payload"]
+      input_artifacts  = ["source_output"]
       output_artifacts = ["build_output"]
 
       configuration = {
@@ -51,6 +51,16 @@ resource "aws_codepipeline" "lambdius-constructum-continua-lambda-codepipeline" 
             value = var.shared_artifacts_bucket
             type  = "PLAINTEXT"
           },
+          {
+            name  = "COMMIT_ID"
+            value = "#{Source.SourceIdentifier.CommitId}"
+            type  = "PLAINTEXT"
+          },
+          {
+            name  = "PREVIOUS_COMMIT_ID"
+            value = "#{Source.SourceIdentifier.PreviousCommitId}"
+            type  = "PLAINTEXT"
+          }
         ])
       }
     }

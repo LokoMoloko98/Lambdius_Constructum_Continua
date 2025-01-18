@@ -1,4 +1,4 @@
 resource "aws_codestarconnections_connection" "github_connection" {
-  name          = "GitHubConnection"
+  name          = "${var.project_name}-GitHubConnection"
   provider_type = "GitHub"
 }
