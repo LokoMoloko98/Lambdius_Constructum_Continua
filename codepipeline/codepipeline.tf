@@ -25,7 +25,7 @@ resource "aws_codepipeline" "lambdius-constructum-continua-lambda-codepipeline" 
       configuration = {
         ConnectionArn        = aws_codestarconnections_connection.github_connection.arn
         FullRepositoryId     = var.lambda_functions_repo
-        BranchName           = "Buildspec-Edits"
+        BranchName           = "main"
       }
     }
   }
